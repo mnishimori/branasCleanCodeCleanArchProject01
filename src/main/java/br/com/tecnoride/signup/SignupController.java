@@ -1,16 +1,18 @@
 package br.com.tecnoride.signup;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/signup")
-public class MainController {
+public class SignupController {
 
     @Autowired
     private SignupService signupService;
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public String signup(@RequestBody UserInput input) {
         try {
             int result = signupService.signup(input);

@@ -33,6 +33,24 @@ dependencies {
 	testImplementation "org.testcontainers:postgresql:1.17.6"
 }
 
+/*
 tasks.named('test') {
 	useJUnitPlatform()
+}
+*/
+
+tasks.withType(Test).configureEach {
+	description = 'Runs the unit tests.'
+	group = 'verification'
+	useJUnitPlatform({
+		excludeTags 'integrationTest'
+	})
+}
+
+tasks.register('integrationTest', Test) {
+	description = 'Runs the integration tests.'
+	group = 'verification'
+	useJUnitPlatform {
+		includeTags 'integrationTest'
+	}
 }
