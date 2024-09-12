@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.FieldError;
 
 @Service
 public class SignupService {
@@ -61,8 +62,61 @@ public class SignupService {
         input.getCarPlate(), input.isPassenger(), input.isDriver());
   }
 
-  private boolean validateCpf(String cpf) {
-    // Implementação da validação de CPF
+  private Boolean validateCpf(String cpfValue) {
+    var isValid = this.validateNotNullOf(cpfValue);
+    isValid = isValid && this.validateNotEmptyOf(cpfValue);
+    isValid = isValid && this.validateLengthOf(cpfValue);
+    isValid = isValid && this.validate(cpfValue);
+    return isValid;
+  }
+
+  private Boolean validate(String rawCpf) {
+    String cpf = removeNonDigits(rawCpf);
+    if (hasAllDigitsEqual(cpf)) {
+      return false;
+    }
+    int digit1 = calculateDigit(cpf, 10);
+    int digit2 = calculateDigit(cpf, 11);
+    if (!extractDigit(cpf).equals(String.valueOf(digit1) + digit2)) {
+      return false;
+    }
     return true;
+  }
+
+  private String extractDigit(String cpf) {
+    return cpf.substring(9);
+  }
+
+  private int calculateDigit(String cpf, int factor) {
+    int total = 0;
+    for (char digit : cpf.toCharArray()) {
+      if (factor > 1) {
+        total += Character.getNumericValue(digit) * factor--;
+      }
+    }
+    int rest = total % 11;
+    return (rest < 2) ? 0 : 11 - rest;
+  }
+
+  private Boolean hasAllDigitsEqual(String cpf) {
+    char firstCpfDigit = cpf.charAt(0);
+    return cpf.chars().allMatch(digit -> digit == firstCpfDigit);
+  }
+
+  private String removeNonDigits(String cpf) {
+    return cpf.replaceAll("\\D", "");
+  }
+
+
+  private Boolean validateLengthOf(String cpfValue) {
+    return cpfValue.trim().length() == 11;
+  }
+
+  private Boolean validateNotEmptyOf(String cpfValue) {
+    return !cpfValue.trim().isEmpty();
+  }
+
+  private Boolean validateNotNullOf(String cpfValue) {
+    return cpfValue != null;
   }
 }
