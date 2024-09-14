@@ -2,12 +2,12 @@ package br.com.tecnoride.signup;
 
 public class UserInput {
 
-  private String name;
-  private String email;
-  private String cpf;
-  private String carPlate;
-  private boolean isPassenger;
-  private boolean isDriver;
+  private final String email;
+  private final String name;
+  private final String cpf;
+  private final String carPlate;
+  private final boolean isPassenger;
+  private final boolean isDriver;
 
   public UserInput(String name, String email, String cpf, String carPlate, boolean isPassenger, boolean isDriver) {
     this.name = name;
@@ -34,11 +34,11 @@ public class UserInput {
     return carPlate;
   }
 
-  public boolean isPassenger() {
+  public boolean getIsPassenger() {
     return isPassenger;
   }
 
-  public boolean isDriver() {
+  public boolean getIsDriver() {
     return isDriver;
   }
 }
