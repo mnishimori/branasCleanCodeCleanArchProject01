@@ -1,57 +1,57 @@
 package br.com.tecnoride.signup;
 
-import java.util.UUID;
 import java.util.regex.Pattern;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
 public class SignupService {
 
-  @Autowired
-  private JdbcTemplate jdbcTemplate;
+  private final JdbcTemplate jdbcTemplate;
 
-  public int signup(UserInput input) {
+  public SignupService(JdbcTemplate jdbcTemplate) {
+    this.jdbcTemplate = jdbcTemplate;
+  }
 
-    String id = UUID.randomUUID().toString();
+  public void signup(UserInput input) {
+    verifyIfUserExists(input);
+    userNamePatternIsInvalid(input.getName());
+    emailPatternIsInvalid(input.getEmail());
+    cpfPatternIsInvalid(input.getCpf());
+    userIsDriverAndCarPlatePatternIsInvalid(input);
+    insertAccount(input);
+  }
 
-    // Verifica se o email já existe
-    try {
-      String query = "SELECT * FROM cccat15.account WHERE email = ?";
-      boolean empty = jdbcTemplate.query(query,
-              (rs, rowNum) -> new UserInput(rs.getString("name"), rs.getString("email"), rs.getString("cpf"),
-                  rs.getString("car_plate"), rs.getBoolean("is_passenger"), rs.getBoolean("is_driver")), input.getEmail())
-          .isEmpty();
-      if (empty) {
-        if (Pattern.matches("[A-Z][a-z]+ [A-Z][a-z]+", input.getName())) {
-          if (Pattern.matches("^(.+)@(.+)$", input.getEmail())) {
-            if (validateCpf(input.getCpf())) {
-              if (input.getIsDriver()) {
-                if (Pattern.matches("[A-Z]{3}[0-9]{4}", input.getCarPlate())) {
-                  insertAccount(input);
-                  return 1; // Sucesso
-                } else {
-                  return -5; // Placa de carro inválida
-                }
-              } else {
-                insertAccount(input);
-                return 1; // Sucesso
-              }
-            } else {
-              return -1; // CPF inválido
-            }
-          } else {
-            return -2; // Email inválido
-          }
-        } else {
-          return -3; // Nome inválido
-        }
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
+  private void userIsDriverAndCarPlatePatternIsInvalid(UserInput input) {
+    var userDriverCarPlateInvalid = input.getIsDriver() && !Pattern.matches("[A-Z]{3}[0-9]{4}", input.getCarPlate());
+    if (userDriverCarPlateInvalid) {
+      throw new RuntimeException("Placa de carro inválida.");
     }
-    return -4;
+  }
+
+  private void emailPatternIsInvalid(String email) {
+    var emailInvalid = !Pattern.matches("^(.+)@(.+)$", email);
+    if (emailInvalid) {
+      throw new RuntimeException("Email inválido.");
+    }
+  }
+
+  private void userNamePatternIsInvalid(String name) {
+    var userNameInvalid = !Pattern.matches("[A-Z][a-z]+ [A-Z][a-z]+", name);
+    if (userNameInvalid) {
+      throw new RuntimeException("Nome inválido.");
+    }
+  }
+
+  private void verifyIfUserExists(UserInput input) {
+    String query = "SELECT * FROM cccat15.account WHERE email = ?";
+    var userExists = !jdbcTemplate.query(query,
+            (rs, rowNum) -> new UserInput(rs.getString("name"), rs.getString("email"), rs.getString("cpf"),
+                rs.getString("car_plate"), rs.getBoolean("is_passenger"), rs.getBoolean("is_driver")), input.getEmail())
+        .isEmpty();
+    if (userExists) {
+      throw new RuntimeException("Usuário já existe.");
+    }
   }
 
   private void insertAccount(UserInput input) {
@@ -61,25 +61,24 @@ public class SignupService {
         input.getCarPlate(), input.getIsPassenger(), input.getIsDriver());
   }
 
-  private Boolean validateCpf(String cpfValue) {
-    var isValid = this.validateNotNullOf(cpfValue);
-    isValid = isValid && this.validateNotEmptyOf(cpfValue);
-    isValid = isValid && this.validateLengthOf(cpfValue);
-    isValid = isValid && this.validate(cpfValue);
-    return isValid;
+  private void cpfPatternIsInvalid(String cpfValue) {
+    var cpfValid = this.validateNotNullOf(cpfValue);
+    cpfValid = cpfValid && this.validateNotEmptyOf(cpfValue);
+    cpfValid = cpfValid && this.validateLengthOf(cpfValue);
+    cpfValid = cpfValid && this.validate(cpfValue);
+    if (!cpfValid) {
+      throw new RuntimeException("CPF inválido.");
+    }
   }
 
-  private Boolean validate(String rawCpf) {
+  private boolean validate(String rawCpf) {
     String cpf = removeNonDigits(rawCpf);
     if (hasAllDigitsEqual(cpf)) {
       return false;
     }
     int digit1 = calculateDigit(cpf, 10);
     int digit2 = calculateDigit(cpf, 11);
-    if (!extractDigit(cpf).equals(String.valueOf(digit1) + digit2)) {
-      return false;
-    }
-    return true;
+    return extractDigit(cpf).equals(String.valueOf(digit1) + digit2);
   }
 
   private String extractDigit(String cpf) {
@@ -97,7 +96,7 @@ public class SignupService {
     return (rest < 2) ? 0 : 11 - rest;
   }
 
-  private Boolean hasAllDigitsEqual(String cpf) {
+  private boolean hasAllDigitsEqual(String cpf) {
     char firstCpfDigit = cpf.charAt(0);
     return cpf.chars().allMatch(digit -> digit == firstCpfDigit);
   }
@@ -106,16 +105,15 @@ public class SignupService {
     return cpf.replaceAll("\\D", "");
   }
 
-
-  private Boolean validateLengthOf(String cpfValue) {
+  private boolean validateLengthOf(String cpfValue) {
     return cpfValue.trim().length() == 11;
   }
 
-  private Boolean validateNotEmptyOf(String cpfValue) {
+  private boolean validateNotEmptyOf(String cpfValue) {
     return !cpfValue.trim().isEmpty();
   }
 
-  private Boolean validateNotNullOf(String cpfValue) {
+  private boolean validateNotNullOf(String cpfValue) {
     return cpfValue != null;
   }
 }

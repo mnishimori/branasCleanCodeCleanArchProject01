@@ -68,7 +68,7 @@ class SignupControllerTest {
         .contentType(APPLICATION_JSON)
         .content(userJson);
     var response = mockMvc.perform(request)
-        .andExpect(status().isCreated())
+        .andExpect(status().isBadRequest())
         .andReturn().getResponse();
 
     assertThat(response).isNotNull();
@@ -87,7 +87,7 @@ class SignupControllerTest {
         .contentType(APPLICATION_JSON)
         .content(userJson);
     var response = mockMvc.perform(request)
-        .andExpect(status().isCreated())
+        .andExpect(status().isBadRequest())
         .andReturn().getResponse();
 
     assertThat(response).isNotNull();
@@ -106,7 +106,7 @@ class SignupControllerTest {
         .contentType(APPLICATION_JSON)
         .content(userJson);
     var response = mockMvc.perform(request)
-        .andExpect(status().isCreated())
+        .andExpect(status().isBadRequest())
         .andReturn().getResponse();
 
     assertThat(response).isNotNull();
@@ -125,7 +125,7 @@ class SignupControllerTest {
         .contentType(APPLICATION_JSON)
         .content(userJson);
     var response = mockMvc.perform(request)
-        .andExpect(status().isCreated())
+        .andExpect(status().isBadRequest())
         .andReturn().getResponse();
 
     assertThat(response).isNotNull();
@@ -145,7 +145,7 @@ class SignupControllerTest {
         .contentType(APPLICATION_JSON)
         .content(userJson);
     var response = mockMvc.perform(request)
-        .andExpect(status().isCreated())
+        .andExpect(status().isBadRequest())
         .andReturn().getResponse();
 
     assertThat(response).isNotNull();
