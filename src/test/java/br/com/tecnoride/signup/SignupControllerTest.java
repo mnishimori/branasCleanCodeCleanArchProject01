@@ -49,6 +49,12 @@ class SignupControllerTest {
     return user;
   }
 
+  private void insertUser(UserInput input) {
+    String insertSQL = "INSERT INTO cccat15.account (name, email, cpf, car_plate, is_passenger, is_driver) " +
+        "VALUES (?, ?, ?, ?, ?, ?)";
+    jdbcTemplate.update(insertSQL, input.getName(), input.getEmail(), input.getCpf(),
+        input.getCarPlate(), input.getIsPassenger(), input.getIsDriver());
+  }
 
   @ParameterizedTest
   @ValueSource(strings = {"fulano", "Fulano", "FULANO", "Fulano beltrano", "Fulano BELTRANO",
@@ -109,10 +115,10 @@ class SignupControllerTest {
   }
 
   @ParameterizedTest
-  @NullAndEmptySource
+  @EmptySource
   @ValueSource(strings = {"123-1234", "ABC-DEFG", "ABC-D3FG"})
-  void shouldReturnPlacaDeCarroInvalidaWhenCarPlateIsInvalid(String carPlate) throws Exception {
-    var userInputDto = new UserInput("Fulano Beltrano", "email@domain.com", "46768134221", carPlate, true, false);
+  void shouldReturnPlacaDeCarroInvalidaWhenIsDriverAndCarPlateIsInvalid(String carPlate) throws Exception {
+    var userInputDto = new UserInput("Fulano Beltrano", "email@domain.com", "46768134221", carPlate, false, true);
     var userJson = JsonUtil.toJson(userInputDto);
 
     var request = post("/api/signup")
@@ -130,6 +136,8 @@ class SignupControllerTest {
   @Test
   void shouldReturnUsuarioJaExisteWhenUserEmailAlreadyExists() throws Exception {
     var userInputDto = new UserInput("Fulano Tal", "fulano@email.com", "46768134221", "ABC-1234", true, false);
+    var userInput = new UserInput(userInputDto.getName(), userInputDto.getEmail(), userInputDto.getCpf(), userInputDto.getCarPlate(), userInputDto.getIsPassenger(), userInputDto.getIsDriver());
+    insertUser(userInput);
     var userJson = JsonUtil.toJson(userInputDto);
 
     var request = post("/api/signup")

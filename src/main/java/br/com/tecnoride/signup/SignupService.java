@@ -5,7 +5,6 @@ import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.FieldError;
 
 @Service
 public class SignupService {
@@ -28,7 +27,7 @@ public class SignupService {
         if (Pattern.matches("[A-Z][a-z]+ [A-Z][a-z]+", input.getName())) {
           if (Pattern.matches("^(.+)@(.+)$", input.getEmail())) {
             if (validateCpf(input.getCpf())) {
-              if (input.isDriver()) {
+              if (input.getIsDriver()) {
                 if (Pattern.matches("[A-Z]{3}[0-9]{4}", input.getCarPlate())) {
                   insertAccount(input);
                   return 1; // Sucesso
@@ -52,14 +51,14 @@ public class SignupService {
     } catch (Exception e) {
       e.printStackTrace();
     }
-    return 0;
+    return -4;
   }
 
   private void insertAccount(UserInput input) {
     String insertSQL = "INSERT INTO cccat15.account (name, email, cpf, car_plate, is_passenger, is_driver) " +
         "VALUES (?, ?, ?, ?, ?, ?)";
     jdbcTemplate.update(insertSQL, input.getName(), input.getEmail(), input.getCpf(),
-        input.getCarPlate(), input.isPassenger(), input.isDriver());
+        input.getCarPlate(), input.getIsPassenger(), input.getIsDriver());
   }
 
   private Boolean validateCpf(String cpfValue) {
