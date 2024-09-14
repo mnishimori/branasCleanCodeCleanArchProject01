@@ -136,7 +136,8 @@ class SignupControllerTest {
   @Test
   void shouldReturnUsuarioJaExisteWhenUserEmailAlreadyExists() throws Exception {
     var userInputDto = new UserInput("Fulano Tal", "fulano@email.com", "46768134221", "ABC-1234", true, false);
-    var userInput = new UserInput(userInputDto.getName(), userInputDto.getEmail(), userInputDto.getCpf(), userInputDto.getCarPlate(), userInputDto.getIsPassenger(), userInputDto.getIsDriver());
+    var userInput = new UserInput(userInputDto.getName(), userInputDto.getEmail(), userInputDto.getCpf(),
+        userInputDto.getCarPlate(), userInputDto.getIsPassenger(), userInputDto.getIsDriver());
     insertUser(userInput);
     var userJson = JsonUtil.toJson(userInputDto);
 
