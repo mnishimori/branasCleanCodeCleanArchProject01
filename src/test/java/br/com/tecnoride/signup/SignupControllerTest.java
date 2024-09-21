@@ -8,8 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import br.com.tecnoride.signup.shared.annotation.DatabaseTest;
 import br.com.tecnoride.signup.shared.annotation.IntegrationTest;
 import br.com.tecnoride.signup.shared.api.JsonUtil;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EmptySource;
@@ -23,6 +21,19 @@ import org.springframework.test.web.servlet.MockMvc;
 @DatabaseTest
 class SignupControllerTest {
 
+  public static final String FULANO_EMAIL = "fulano@email.com";
+  public static final String CPF = "46768134221";
+  public static final String CAR_PLATE = "ABC-1234";
+  public static final boolean IS_PASSENGER = true;
+  public static final boolean IS_DRIVER = false;
+  public static final String FULANO_BELTRANO = "Fulano Beltrano";
+  public static final String URL_API_SIGNUP = "/api/signup";
+  public static final String NOME_INVALIDO = "Nome inválido.";
+  public static final String EMAIL_INVALIDO = "Email inválido.";
+  public static final String CPF_INVALIDO = "CPF inválido.";
+  public static final String PLACA_DE_CARRO_INVALIDA = "Placa de carro inválida.";
+  public static final String USUÁRIO_JA_EXISTE = "Usuário já existe.";
+  public static final String CADASTRO_REALIZADO_COM_SUCESSO = "Cadastro realizado com sucesso!";
   private final MockMvc mockMvc;
   private final JdbcTemplate jdbcTemplate;
 
@@ -30,23 +41,6 @@ class SignupControllerTest {
   SignupControllerTest(MockMvc mockMvc, JdbcTemplate jdbcTemplate) {
     this.mockMvc = mockMvc;
     this.jdbcTemplate = jdbcTemplate;
-  }
-
-  private UserInput getUserBy(String email) throws SQLException {
-    var query = "SELECT * FROM account WHERE email = ?";
-    var resultSet = (ResultSet) jdbcTemplate.queryForRowSet(query, new Object[]{email});
-    UserInput user = null;
-    if (!resultSet.next()) {
-      var name = resultSet.getString("name");
-      var userEmail = resultSet.getString("email");
-      var cpf = resultSet.getString("cpf");
-      var carPlate = resultSet.getString("car_plate");
-      var isPassenger = resultSet.getBoolean("is_passenger");
-      var isDriver = resultSet.getBoolean("is_driver");
-      user = new UserInput(name, userEmail, cpf, carPlate, isPassenger, isDriver);
-    }
-    resultSet.close();
-    return user;
   }
 
   private void insertUser(UserInput input) {
@@ -61,10 +55,10 @@ class SignupControllerTest {
       "Fulano Beltrano Ciclano"})
   void shouldReturnNomeInvalidoWhenUserNameDoesNotHaveTwoWordsWithFirstWordCharUpperCaseAndTheRestAreNotLowerCaseChars(
       String name) throws Exception {
-    var userInputDto = new UserInput(name, "fulano@email.com", "46768134221", "ABC-1234", true, false);
+    var userInputDto = new UserInput(name, FULANO_EMAIL, CPF, CAR_PLATE, IS_PASSENGER, IS_DRIVER);
     var userJson = JsonUtil.toJson(userInputDto);
 
-    var request = post("/api/signup")
+    var request = post(URL_API_SIGNUP)
         .contentType(APPLICATION_JSON)
         .content(userJson);
     var response = mockMvc.perform(request)
@@ -73,17 +67,17 @@ class SignupControllerTest {
 
     assertThat(response).isNotNull();
     var contentAsString = response.getContentAsString();
-    assertThat(contentAsString).isNotNull().isEqualTo("Nome inválido.");
+    assertThat(contentAsString).isNotNull().isEqualTo(NOME_INVALIDO);
   }
 
   @ParameterizedTest
   @EmptySource
   @ValueSource(strings = {"email.domain.com", " email.domain.com", "@", "1"})
   void shouldReturnEmailInvalidoWhenUserEmailIsValid(String email) throws Exception {
-    var userInputDto = new UserInput("Fulano Beltrano", email, "46768134221", "ABC-1234", true, false);
+    var userInputDto = new UserInput(FULANO_BELTRANO, email, CPF, CAR_PLATE, IS_PASSENGER, IS_DRIVER);
     var userJson = JsonUtil.toJson(userInputDto);
 
-    var request = post("/api/signup")
+    var request = post(URL_API_SIGNUP)
         .contentType(APPLICATION_JSON)
         .content(userJson);
     var response = mockMvc.perform(request)
@@ -92,17 +86,17 @@ class SignupControllerTest {
 
     assertThat(response).isNotNull();
     var contentAsString = response.getContentAsString();
-    assertThat(contentAsString).isNotNull().isEqualTo("Email inválido.");
+    assertThat(contentAsString).isNotNull().isEqualTo(EMAIL_INVALIDO);
   }
 
   @ParameterizedTest
   @NullAndEmptySource
   @ValueSource(strings = {"72387289316", "18939181068", "12345678901", "11111111111", "1111111111a"})
   void shouldReturnCpfInvalidoWhenUserCpfIsValid(String cpf) throws Exception {
-    var userInputDto = new UserInput("Fulano Beltrano", "email@domain.com", cpf, "ABC-1234", true, false);
+    var userInputDto = new UserInput(FULANO_BELTRANO, FULANO_EMAIL, cpf, CAR_PLATE, IS_PASSENGER, IS_DRIVER);
     var userJson = JsonUtil.toJson(userInputDto);
 
-    var request = post("/api/signup")
+    var request = post(URL_API_SIGNUP)
         .contentType(APPLICATION_JSON)
         .content(userJson);
     var response = mockMvc.perform(request)
@@ -111,17 +105,17 @@ class SignupControllerTest {
 
     assertThat(response).isNotNull();
     var contentAsString = response.getContentAsString();
-    assertThat(contentAsString).isNotNull().isEqualTo("CPF inválido.");
+    assertThat(contentAsString).isNotNull().isEqualTo(CPF_INVALIDO);
   }
 
   @ParameterizedTest
   @EmptySource
   @ValueSource(strings = {"123-1234", "ABC-DEFG", "ABC-D3FG"})
   void shouldReturnPlacaDeCarroInvalidaWhenIsDriverAndCarPlateIsInvalid(String carPlate) throws Exception {
-    var userInputDto = new UserInput("Fulano Beltrano", "email@domain.com", "46768134221", carPlate, false, true);
+    var userInputDto = new UserInput(FULANO_BELTRANO, FULANO_EMAIL, CPF, carPlate, false, true);
     var userJson = JsonUtil.toJson(userInputDto);
 
-    var request = post("/api/signup")
+    var request = post(URL_API_SIGNUP)
         .contentType(APPLICATION_JSON)
         .content(userJson);
     var response = mockMvc.perform(request)
@@ -130,18 +124,18 @@ class SignupControllerTest {
 
     assertThat(response).isNotNull();
     var contentAsString = response.getContentAsString();
-    assertThat(contentAsString).isNotNull().isEqualTo("Placa de carro inválida.");
+    assertThat(contentAsString).isNotNull().isEqualTo(PLACA_DE_CARRO_INVALIDA);
   }
 
   @Test
   void shouldReturnUsuarioJaExisteWhenUserEmailAlreadyExists() throws Exception {
-    var userInputDto = new UserInput("Fulano Tal", "fulano@email.com", "46768134221", "ABC-1234", true, false);
+    var userInputDto = new UserInput(FULANO_BELTRANO, FULANO_EMAIL, CPF, CAR_PLATE, IS_PASSENGER, IS_DRIVER);
     var userInput = new UserInput(userInputDto.getName(), userInputDto.getEmail(), userInputDto.getCpf(),
         userInputDto.getCarPlate(), userInputDto.getIsPassenger(), userInputDto.getIsDriver());
     insertUser(userInput);
     var userJson = JsonUtil.toJson(userInputDto);
 
-    var request = post("/api/signup")
+    var request = post(URL_API_SIGNUP)
         .contentType(APPLICATION_JSON)
         .content(userJson);
     var response = mockMvc.perform(request)
@@ -150,15 +144,15 @@ class SignupControllerTest {
 
     assertThat(response).isNotNull();
     var contentAsString = response.getContentAsString();
-    assertThat(contentAsString).isNotNull().isEqualTo("Usuário já existe.");
+    assertThat(contentAsString).isNotNull().isEqualTo(USUÁRIO_JA_EXISTE);
   }
 
   @Test
   void shouldSignUpNewAccountWhenAllAttributesAreCorrect() throws Exception {
-    var userInputDto = new UserInput("Fulano Tal", "fulano@email.com", "46768134221", "ABC-1234", true, false);
+    var userInputDto = new UserInput(FULANO_BELTRANO, FULANO_EMAIL, CPF, CAR_PLATE, IS_PASSENGER, IS_DRIVER);
     var userJson = JsonUtil.toJson(userInputDto);
 
-    var request = post("/api/signup")
+    var request = post(URL_API_SIGNUP)
         .contentType(APPLICATION_JSON)
         .content(userJson);
     var response = mockMvc.perform(request)
@@ -167,6 +161,6 @@ class SignupControllerTest {
 
     assertThat(response).isNotNull();
     var contentAsString = response.getContentAsString();
-    assertThat(contentAsString).isNotNull().isEqualTo("Cadastro realizado com sucesso!");
+    assertThat(contentAsString).isNotNull().isEqualTo(CADASTRO_REALIZADO_COM_SUCESSO);
   }
 }
