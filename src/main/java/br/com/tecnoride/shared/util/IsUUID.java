@@ -27,5 +27,4 @@ public class IsUUID extends TypeSafeMatcher<String> {
   public void describeTo(Description description) {
     description.appendText("a string matching the valid UUID");
   }
-
 }
