@@ -14,6 +14,10 @@ public class AccountServiceImpl implements AccountService {
 
   @Override
   public Account findAccountById(UUID uuid) {
-    return accountDao.findAccountBy(uuid);
+    var account = accountDao.findAccountBy(uuid);
+    if (account == null) {
+      throw new RuntimeException("Account not found with id %s".formatted(uuid));
+    }
+    return account;
   }
 }

@@ -9,13 +9,13 @@ public class AccountRowMapper implements RowMapper<Account> {
 
   @Override
   public Account mapRow(ResultSet rs, int rowNum) throws SQLException {
-    var id = UUID.fromString(rs.getString("id"));
+    var id = UUID.fromString(rs.getString("account_id"));
     var name = rs.getString("name");
     var email = rs.getString("email");
     var cpf = rs.getString("cpf");
     var carPlate = rs.getString("car_plate");
     var isPassenger = rs.getBoolean("is_passenger");
     var isDriver = rs.getBoolean("is_driver");
-    return new Account(id, name, email, cpf, carPlate, isPassenger, isDriver);
+    return new Account(id, email, name, cpf, carPlate, isPassenger, isDriver);
   }
 }

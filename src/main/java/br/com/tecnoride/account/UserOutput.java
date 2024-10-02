@@ -25,8 +25,7 @@ public class UserOutput {
 
   public static UserOutput from(Account account) {
     return new UserOutput(account.getId(), account.getEmail(), account.getName(), account.getCpf(),
-        account.getCarPlate(), account.isPassenger(),
-        account.isDriver());
+        account.getCarPlate(), account.isPassenger(), account.isDriver());
   }
 
   public UUID getId() {

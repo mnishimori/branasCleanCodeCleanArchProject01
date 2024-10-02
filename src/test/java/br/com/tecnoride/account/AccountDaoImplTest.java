@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,7 +33,7 @@ class AccountDaoImplTest {
   @Test
   void shouldNotFindAccountByIdWhenAccountDoesNotExist() {
     var uuid = UUID.randomUUID();
-    when(jdbcTemplate.queryForObject(anyString(), any(Object[].class), any(AccountRowMapper.class)))
+    when(jdbcTemplate.query(anyString(), any(Object[].class), any(AccountRowMapper.class)))
         .thenThrow(new EmptyResultDataAccessException(1));
 
     var account = accountDao.findAccountBy(uuid);
@@ -43,7 +44,7 @@ class AccountDaoImplTest {
   @Test
   void shouldThrowExceptionWhenDatabaseErrorOccurs() {
     var uuid = UUID.randomUUID();
-    when(jdbcTemplate.queryForObject(anyString(), any(Object[].class), any(AccountRowMapper.class)))
+    when(jdbcTemplate.query(anyString(), any(Object[].class), any(AccountRowMapper.class)))
         .thenThrow(new RuntimeException("Database error"));
 
     assertThatThrownBy(() -> accountDao.findAccountBy(uuid))
@@ -54,10 +55,10 @@ class AccountDaoImplTest {
   @Test
   void shouldFindAccountByIdWhenAccountIdExists() {
     var uuid = UUID.randomUUID();
-    var expectedAccount = new Account(uuid, FULANO_CICLANO_NAME, FULANO_CICLANO_EMAIL, FULANO_CICLANO_CPF, CAR_PLATE,
+    var expectedAccount = new Account(uuid, FULANO_CICLANO_EMAIL, FULANO_CICLANO_NAME, FULANO_CICLANO_CPF, CAR_PLATE,
         IS_PASSENGER, IS_DRIVER);
-    when(jdbcTemplate.queryForObject(anyString(), any(Object[].class), any(AccountRowMapper.class)))
-        .thenReturn(expectedAccount);
+    when(jdbcTemplate.query(anyString(), any(Object[].class), any(AccountRowMapper.class)))
+        .thenReturn(List.of(expectedAccount));
 
     var actualAccount = accountDao.findAccountBy(uuid);
 
@@ -67,7 +68,7 @@ class AccountDaoImplTest {
 
   @Test
   void shouldNotFindAccountByEmailWhenAccountDoesNotExist() {
-    when(jdbcTemplate.queryForObject(anyString(), any(Object[].class), any(AccountRowMapper.class)))
+    when(jdbcTemplate.query(anyString(), any(Object[].class), any(AccountRowMapper.class)))
         .thenThrow(new EmptyResultDataAccessException(1));
 
     var account = accountDao.findAccountBy(FULANO_CICLANO_EMAIL);
@@ -78,10 +79,10 @@ class AccountDaoImplTest {
   @Test
   void shouldFindAccountByEmailWhenAccountEmailExists() {
     var uuid = UUID.randomUUID();
-    var expectedAccount = new Account(uuid, FULANO_CICLANO_NAME, FULANO_CICLANO_EMAIL, FULANO_CICLANO_CPF, CAR_PLATE,
+    var expectedAccount = new Account(uuid, FULANO_CICLANO_EMAIL, FULANO_CICLANO_NAME, FULANO_CICLANO_CPF, CAR_PLATE,
         IS_PASSENGER, IS_DRIVER);
-    when(jdbcTemplate.queryForObject(anyString(), any(Object[].class), any(AccountRowMapper.class)))
-        .thenReturn(expectedAccount);
+    when(jdbcTemplate.query(anyString(), any(Object[].class), any(AccountRowMapper.class)))
+        .thenReturn(List.of(expectedAccount));
 
     var actualAccount = accountDao.findAccountBy(FULANO_CICLANO_EMAIL);
 

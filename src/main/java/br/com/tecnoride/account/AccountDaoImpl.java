@@ -16,18 +16,20 @@ public class AccountDaoImpl implements AccountDao {
 
   @Override
   public Account findAccountBy(UUID uuid) {
-    var query = "SELECT * FROM account WHERE id = ?";
+    var query = "SELECT * FROM cccat15.account WHERE account_id = ?";
     try {
-      return jdbcTemplate.queryForObject(query, new Object[]{uuid}, new AccountRowMapper());
+      var accounts = jdbcTemplate.query(query, new Object[]{uuid}, new AccountRowMapper());
+      return accounts.isEmpty() ? null : accounts.get(0);
     } catch (EmptyResultDataAccessException e) {
       return null;
     }
   }
 
   public Account findAccountBy(String email) {
-    var query = "SELECT * FROM account WHERE id = ?";
+    var query = "SELECT * FROM account WHERE email = ?";
     try {
-      return jdbcTemplate.queryForObject(query, new Object[]{email}, new AccountRowMapper());
+      var accounts = jdbcTemplate.query(query, new Object[]{email}, new AccountRowMapper());
+      return accounts.isEmpty() ? null : accounts.get(0);
     } catch (EmptyResultDataAccessException e) {
       return null;
     }

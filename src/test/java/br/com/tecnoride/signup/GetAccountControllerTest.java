@@ -10,10 +10,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import br.com.tecnoride.signup.shared.annotation.DatabaseTest;
 import br.com.tecnoride.signup.shared.annotation.IntegrationTest;
 import java.util.UUID;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -35,23 +34,30 @@ class GetAccountControllerTest {
 
   private String insertUser(UserInput input) {
     var id = UUID.randomUUID().toString();
-    String insertSQL = "INSERT INTO cccat15.account (id, name, email, cpf, car_plate, is_passenger, is_driver) " +
-        "VALUES (?, ?, ?, ?, ?, ?)";
-    jdbcTemplate.update(insertSQL, id, input.getName(), input.getEmail(), input.getCpf(),
+    String insertSQL = "INSERT INTO cccat15.account (account_id, name, email, cpf, car_plate, is_passenger, is_driver) " +
+        "VALUES (?, ?, ?, ?, ?, ?, ?)";
+    jdbcTemplate.update(insertSQL, UUID.fromString(id), input.getName(), input.getEmail(), input.getCpf(),
         input.getCarPlate(), input.getIsPassenger(), input.getIsDriver());
     return id;
   }
 
   @ParameterizedTest
-  @NullAndEmptySource
+  @NullSource
   @ValueSource(strings = {"a", "1", "a1"})
   void shouldReturnBadRequestWhenAccountIdIsInvalidUuid(String id) throws Exception {
-    Assertions.fail("shouldReturnBadRequestWhenAccountIdIsInvalidUuid");
+    var request = get(URL_ACCOUNT_ID.formatted(id));
+    var response = mockMvc.perform(request);
+
+    response.andExpect(status().isBadRequest());
   }
 
   @Test
-  void shouldReturnNotFoundWhenAccountIdWasNotFound() throws Exception {
-    Assertions.fail("shouldReturnNotFoundWhenAccountIdWasNotFound");
+  void shouldReturnBadRequestWhenAccountIdWasNotFound() throws Exception {
+    var id = UUID.randomUUID();
+    var request = get(URL_ACCOUNT_ID.formatted(id));
+    var response = mockMvc.perform(request);
+
+    response.andExpect(status().isBadRequest());
   }
 
   @Test

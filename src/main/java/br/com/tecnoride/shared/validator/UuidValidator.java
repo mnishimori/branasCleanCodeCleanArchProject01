@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class UuidValidator {
 
   public void validate(String uuid) {
-    if (!IsUUID.isUUID().matches(uuid)) {
+    if (uuid == null || uuid.trim().isEmpty() || !IsUUID.isUUID().matches(uuid)) {
       throw new RuntimeException(UUID_INVALID.formatted(uuid));
     }
   }
