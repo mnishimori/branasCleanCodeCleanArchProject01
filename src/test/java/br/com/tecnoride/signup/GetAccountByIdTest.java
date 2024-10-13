@@ -20,14 +20,14 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @IntegrationTest
 @DatabaseTest
-class GetAccountControllerTest {
+class GetAccountByIdTest {
 
-  public static final String URL_ACCOUNT_ID = "/api/account/%s";
+  public static final String URL_ACCOUNT_ID = "/api/accounts/%s";
   private final MockMvc mockMvc;
   private final JdbcTemplate jdbcTemplate;
 
   @Autowired
-  GetAccountControllerTest(MockMvc mockMvc, JdbcTemplate jdbcTemplate) {
+  GetAccountByIdTest(MockMvc mockMvc, JdbcTemplate jdbcTemplate) {
     this.mockMvc = mockMvc;
     this.jdbcTemplate = jdbcTemplate;
   }
