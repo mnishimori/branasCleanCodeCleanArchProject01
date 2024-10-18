@@ -30,7 +30,8 @@ public class SignupService {
   }
 
   private void emailPatternIsInvalid(String email) {
-    var emailInvalid = !Pattern.matches("^(.+)@(.+)$", email);
+    var emailRegex = "^[a-zA-Z0-9_+&*-]{1,64}(?:\\.[a-zA-Z0-9_+&*-]{1,64})*@(?:[a-zA-Z0-9-]{1,63}\\.)+[a-zA-Z]{2,7}$";
+    var emailInvalid = !Pattern.matches(emailRegex, email);
     if (emailInvalid) {
       throw new RuntimeException("Email inválido.");
     }

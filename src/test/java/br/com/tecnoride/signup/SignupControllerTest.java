@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @DatabaseTest
 class SignupControllerTest {
 
-  public static final String FULANO_EMAIL = "fulano@email.com";
+  public static final String FULANO_EMAIL = "fulano.beltrano@email.com";
   public static final String CPF = "46768134221";
   public static final String CAR_PLATE = "ABC-1234";
   public static final boolean IS_PASSENGER = true;
