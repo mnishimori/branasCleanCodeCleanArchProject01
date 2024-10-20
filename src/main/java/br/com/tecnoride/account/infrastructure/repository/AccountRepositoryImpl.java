@@ -1,16 +1,17 @@
-package br.com.tecnoride.account;
+package br.com.tecnoride.account.infrastructure.repository;
 
+import br.com.tecnoride.account.domain.entity.Account;
 import java.util.UUID;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class AccountDaoImpl implements AccountDao {
+public class AccountRepositoryImpl implements AccountRepository {
 
   private final JdbcTemplate jdbcTemplate;
 
-  public AccountDaoImpl(JdbcTemplate jdbcTemplate) {
+  public AccountRepositoryImpl(JdbcTemplate jdbcTemplate) {
     this.jdbcTemplate = jdbcTemplate;
   }
 
