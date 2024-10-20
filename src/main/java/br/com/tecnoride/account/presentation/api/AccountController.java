@@ -1,5 +1,7 @@
-package br.com.tecnoride.account;
+package br.com.tecnoride.account.presentation.api;
 
+import br.com.tecnoride.account.application.usecase.GetAccountByIdUseCase;
+import br.com.tecnoride.account.presentation.dto.AccountOutputDto;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,8 +18,8 @@ public class AccountController {
   }
 
   @GetMapping("/{id}")
-  public UserOutput getAccountById(@PathVariable String id) {
+  public AccountOutputDto getAccountById(@PathVariable String id) {
     var account = getAccountByIdUseCase.execute(id);
-    return UserOutput.from(account);
+    return AccountOutputDto.from(account);
   }
 }

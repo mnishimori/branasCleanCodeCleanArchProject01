@@ -1,4 +1,4 @@
-package br.com.tecnoride.account;
+package br.com.tecnoride.account.infrastructure.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
+import br.com.tecnoride.account.domain.entity.Account;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 @ExtendWith(MockitoExtension.class)
-class AccountDaoImplTest {
+class AccountRepositoryImplTest {
 
   public static final String FULANO_CICLANO_NAME = "Fulano Ciclano";
   public static final String FULANO_CICLANO_EMAIL = "fulano.ciclano@domain.com";
@@ -28,7 +29,7 @@ class AccountDaoImplTest {
   @Mock
   private JdbcTemplate jdbcTemplate;
   @InjectMocks
-  private AccountDaoImpl accountDao;
+  private AccountRepositoryImpl accountDao;
 
   @Test
   void shouldNotFindAccountByIdWhenAccountDoesNotExist() {

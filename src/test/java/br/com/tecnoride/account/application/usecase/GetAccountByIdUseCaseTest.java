@@ -1,10 +1,12 @@
-package br.com.tecnoride.account;
+package br.com.tecnoride.account.application.usecase;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
+import br.com.tecnoride.account.domain.entity.Account;
+import br.com.tecnoride.account.application.gateway.AccountGateway;
 import br.com.tecnoride.shared.validator.UuidValidator;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -26,7 +28,7 @@ class GetAccountByIdUseCaseTest {
   public static final boolean IS_PASSENGER = true;
   public static final boolean IS_DRIVER = false;
   @Mock
-  private AccountService accountService;
+  private AccountGateway accountGateway;
   @Mock
   private UuidValidator uuidValidator;
   @InjectMocks
@@ -57,7 +59,7 @@ class GetAccountByIdUseCaseTest {
     var id = UUID.randomUUID();
     var account = new Account(id, FULANO_CICLANO_EMAIL, FULANO_CICLANO_NAME, FULANO_CICLANO_CPF, CAR_PLATE,
         IS_PASSENGER, IS_DRIVER);
-    when(accountService.findAccountById(id)).thenReturn(account);
+    when(accountGateway.findAccountById(id)).thenReturn(account);
 
     var accountFound = getAccountByIdUseCase.execute(id.toString());
 

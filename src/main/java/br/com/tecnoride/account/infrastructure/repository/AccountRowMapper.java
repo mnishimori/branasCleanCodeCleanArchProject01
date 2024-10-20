@@ -1,5 +1,6 @@
-package br.com.tecnoride.account;
+package br.com.tecnoride.account.infrastructure.repository;
 
+import br.com.tecnoride.account.domain.entity.Account;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
