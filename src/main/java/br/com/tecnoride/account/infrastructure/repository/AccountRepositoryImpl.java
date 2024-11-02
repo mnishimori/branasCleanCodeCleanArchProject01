@@ -19,20 +19,28 @@ public class AccountRepositoryImpl implements AccountRepository {
   public Account findAccountBy(UUID uuid) {
     var query = "SELECT * FROM cccat15.account WHERE account_id = ?";
     try {
-      var accounts = jdbcTemplate.query(query, new Object[]{uuid}, new AccountRowMapper());
-      return accounts.isEmpty() ? null : accounts.get(0);
+      return jdbcTemplate.queryForObject(query, new AccountRowMapper(), uuid);
     } catch (EmptyResultDataAccessException e) {
       return null;
     }
   }
 
+  @Override
   public Account findAccountBy(String email) {
-    var query = "SELECT * FROM account WHERE email = ?";
+    var query = "SELECT * FROM cccat15.account WHERE email = ?";
     try {
-      var accounts = jdbcTemplate.query(query, new Object[]{email}, new AccountRowMapper());
-      return accounts.isEmpty() ? null : accounts.get(0);
+      return jdbcTemplate.queryForObject(query, new AccountRowMapper(), email);
     } catch (EmptyResultDataAccessException e) {
       return null;
     }
+  }
+
+  @Override
+  public Account save(Account account) {
+    String insertSQL = "INSERT INTO cccat15.account (name, email, cpf, car_plate, is_passenger, is_driver) " +
+        "VALUES (?, ?, ?, ?, ?, ?)";
+    jdbcTemplate.update(insertSQL, account.getAccountName(), account.getEmail(), account.getCpf(),
+        account.getCarPlate(), account.isPassenger(), account.isDriver());
+    return findAccountBy(account.getEmail());
   }
 }

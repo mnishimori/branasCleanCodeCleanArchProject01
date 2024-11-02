@@ -5,5 +5,7 @@ import java.util.UUID;
 
 public interface AccountGateway {
 
-  Account findAccountById(UUID id);
+  Account findAccountByIdRequired(UUID id);
+  Account save(Account account);
+  Account findAccountByEmail(String email);
 }

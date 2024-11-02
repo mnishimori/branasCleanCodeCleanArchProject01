@@ -1,5 +1,6 @@
 package br.com.tecnoride.account.presentation.api;
 
+import static br.com.tecnoride.account.shared.testdata.AccountTestData.createAccountInputDto;
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -7,9 +8,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import br.com.tecnoride.signup.UserInput;
-import br.com.tecnoride.signup.shared.annotation.DatabaseTest;
-import br.com.tecnoride.signup.shared.annotation.IntegrationTest;
+import br.com.tecnoride.account.presentation.dto.AccountInputDto;
+import br.com.tecnoride.shared.annotation.DatabaseTest;
+import br.com.tecnoride.shared.annotation.IntegrationTest;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -33,12 +34,13 @@ class GetAccountByIdApiTest {
     this.jdbcTemplate = jdbcTemplate;
   }
 
-  private String insertUser(UserInput input) {
+  private String insertUser(AccountInputDto accountInputDto) {
     var id = UUID.randomUUID().toString();
-    String insertSQL = "INSERT INTO cccat15.account (account_id, name, email, cpf, car_plate, is_passenger, is_driver) " +
-        "VALUES (?, ?, ?, ?, ?, ?, ?)";
-    jdbcTemplate.update(insertSQL, UUID.fromString(id), input.getName(), input.getEmail(), input.getCpf(),
-        input.getCarPlate(), input.getIsPassenger(), input.getIsDriver());
+    String insertSQL =
+        "INSERT INTO cccat15.account (account_id, name, email, cpf, car_plate, is_passenger, is_driver) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?)";
+    jdbcTemplate.update(insertSQL, UUID.fromString(id), accountInputDto.name(), accountInputDto.email(),
+        accountInputDto.cpf(), accountInputDto.carPlate(), accountInputDto.isPassenger(), accountInputDto.isDriver());
     return id;
   }
 
@@ -53,17 +55,17 @@ class GetAccountByIdApiTest {
   }
 
   @Test
-  void shouldReturnBadRequestWhenAccountIdWasNotFound() throws Exception {
+  void shouldReturnNotFoundWhenAccountIdWasNotFound() throws Exception {
     var id = UUID.randomUUID();
     var request = get(URL_ACCOUNT_ID.formatted(id));
     var response = mockMvc.perform(request);
 
-    response.andExpect(status().isBadRequest());
+    response.andExpect(status().isNotFound());
   }
 
   @Test
   void shouldReturnAccountWhenAccountWasFoundById() throws Exception {
-    var userInputDto = new UserInput("Fulano Ciclano", "fulano@email.com", "46768134221", "ABC-1234", true, false);
+    var userInputDto = createAccountInputDto();
     var id = insertUser(userInputDto);
 
     var request = get(URL_ACCOUNT_ID.formatted(id));
@@ -73,7 +75,7 @@ class GetAccountByIdApiTest {
         .andExpect(content().contentType(APPLICATION_JSON));
     response
         .andExpect(jsonPath("$.id").isNotEmpty())
-        .andExpect(jsonPath("$.name", equalTo(userInputDto.getName())))
-        .andExpect(jsonPath("$.email", equalTo(userInputDto.getEmail())));
+        .andExpect(jsonPath("$.name", equalTo(userInputDto.name())))
+        .andExpect(jsonPath("$.email", equalTo(userInputDto.email())));
   }
 }
