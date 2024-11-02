@@ -1,9 +1,9 @@
 package br.com.tecnoride.shared.validator;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.UUID;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Spy;
@@ -18,7 +18,7 @@ class UuidValidatorTest {
   @Test
   void shouldValidateUuid() {
     var uuid = UUID.randomUUID();
-    Assertions.assertDoesNotThrow(() -> uuidValidator.validate(uuid.toString()));
+    assertDoesNotThrow(() -> uuidValidator.validate(uuid.toString()));
   }
 
   @Test

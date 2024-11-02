@@ -6,6 +6,6 @@ import java.util.UUID;
 public interface AccountRepository {
 
   Account findAccountBy(UUID uuid);
-
   Account findAccountBy(String email);
+  Account save(Account account);
 }
