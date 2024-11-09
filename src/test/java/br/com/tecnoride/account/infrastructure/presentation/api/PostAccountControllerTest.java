@@ -1,4 +1,4 @@
-package br.com.tecnoride.account.presentation.api;
+package br.com.tecnoride.account.infrastructure.presentation.api;
 
 import static br.com.tecnoride.account.domain.message.AccountDomainMessage.CAR_PLATE_IS_INVALID;
 import static br.com.tecnoride.account.domain.message.AccountDomainMessage.CPF_IS_INVALID;
@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import br.com.tecnoride.account.presentation.dto.AccountInputDto;
+import br.com.tecnoride.account.infrastructure.presentation.dto.AccountInputDto;
 import br.com.tecnoride.shared.annotation.DatabaseTest;
 import br.com.tecnoride.shared.annotation.IntegrationTest;
 import br.com.tecnoride.shared.api.JsonUtil;
@@ -34,14 +34,14 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @IntegrationTest
 @DatabaseTest
-class PostAccountApiTest {
+class PostAccountControllerTest {
 
   private static final String URL_ACCOUNTS = "/api/accounts";
   private final MockMvc mockMvc;
   private final JdbcTemplate jdbcTemplate;
 
   @Autowired
-  PostAccountApiTest(MockMvc mockMvc, JdbcTemplate jdbcTemplate) {
+  PostAccountControllerTest(MockMvc mockMvc, JdbcTemplate jdbcTemplate) {
     this.mockMvc = mockMvc;
     this.jdbcTemplate = jdbcTemplate;
   }

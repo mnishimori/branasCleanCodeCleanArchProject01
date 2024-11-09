@@ -1,4 +1,4 @@
-package br.com.tecnoride.account.presentation.api;
+package br.com.tecnoride.account.infrastructure.presentation.api;
 
 import static br.com.tecnoride.account.shared.testdata.AccountTestData.createAccountInputDto;
 import static org.hamcrest.Matchers.equalTo;
@@ -8,7 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import br.com.tecnoride.account.presentation.dto.AccountInputDto;
+import br.com.tecnoride.account.infrastructure.presentation.dto.AccountInputDto;
 import br.com.tecnoride.shared.annotation.DatabaseTest;
 import br.com.tecnoride.shared.annotation.IntegrationTest;
 import java.util.UUID;
@@ -22,14 +22,14 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @IntegrationTest
 @DatabaseTest
-class GetAccountByIdApiTest {
+class GetAccountByIdControllerTest {
 
   public static final String URL_ACCOUNT_ID = "/api/accounts/%s";
   private final MockMvc mockMvc;
   private final JdbcTemplate jdbcTemplate;
 
   @Autowired
-  GetAccountByIdApiTest(MockMvc mockMvc, JdbcTemplate jdbcTemplate) {
+  GetAccountByIdControllerTest(MockMvc mockMvc, JdbcTemplate jdbcTemplate) {
     this.mockMvc = mockMvc;
     this.jdbcTemplate = jdbcTemplate;
   }

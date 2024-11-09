@@ -1,4 +1,4 @@
-package br.com.tecnoride.account.presentation.dto;
+package br.com.tecnoride.account.infrastructure.presentation.dto;
 
 import br.com.tecnoride.account.domain.entity.Account;
 import java.util.UUID;
