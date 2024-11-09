@@ -3,7 +3,7 @@ package br.com.tecnoride.account.application.usecase;
 import br.com.tecnoride.account.application.gateway.AccountGateway;
 import br.com.tecnoride.account.application.validator.VerifyIfAccountAlreadyExistsByEmailValidator;
 import br.com.tecnoride.account.domain.entity.Account;
-import br.com.tecnoride.account.presentation.dto.AccountInputDto;
+import br.com.tecnoride.account.infrastructure.presentation.dto.AccountInputDto;
 
 public abstract class CreateAccountUseCase {
 

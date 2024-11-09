@@ -37,25 +37,27 @@ dependencies {
 }
 
 
+/*
 tasks.named('test') {
 	useJUnitPlatform()
 }
+*/
 
-//tasks.withType(Test).configureEach {
-//	description = 'Runs the unit tests.'
-//	group = 'verification'
-//	useJUnitPlatform({
-//		excludeTags 'integrationTest'
-//	})
-//}
-//
-//tasks.register('integrationTest', Test) {
-//	description = 'Runs the integration tests.'
-//	group = 'verification'
-//	useJUnitPlatform {
-//		includeTags 'integrationTest'
-//	}
-//}
+tasks.withType(Test).configureEach {
+	description = 'Runs the unit tests.'
+	group = 'verification'
+	useJUnitPlatform({
+		excludeTags 'integrationTest'
+	})
+}
+
+tasks.register('integrationTest', Test) {
+	description = 'Runs the integration tests.'
+	group = 'verification'
+	useJUnitPlatform {
+		includeTags 'integrationTest'
+	}
+}
 
 jacoco {
 	toolVersion = "0.8.7"

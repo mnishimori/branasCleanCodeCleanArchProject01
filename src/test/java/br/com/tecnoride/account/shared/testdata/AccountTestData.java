@@ -1,7 +1,7 @@
 package br.com.tecnoride.account.shared.testdata;
 
 import br.com.tecnoride.account.domain.entity.Account;
-import br.com.tecnoride.account.presentation.dto.AccountInputDto;
+import br.com.tecnoride.account.infrastructure.presentation.dto.AccountInputDto;
 import java.util.UUID;
 
 public final class AccountTestData {

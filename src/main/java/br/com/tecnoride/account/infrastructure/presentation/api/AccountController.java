@@ -1,9 +1,9 @@
-package br.com.tecnoride.account.presentation.api;
+package br.com.tecnoride.account.infrastructure.presentation.api;
 
 import br.com.tecnoride.account.application.usecase.CreateAccountUseCase;
 import br.com.tecnoride.account.application.usecase.GetAccountByIdUseCase;
-import br.com.tecnoride.account.presentation.dto.AccountInputDto;
-import br.com.tecnoride.account.presentation.dto.AccountOutputDto;
+import br.com.tecnoride.account.infrastructure.presentation.dto.AccountInputDto;
+import br.com.tecnoride.account.infrastructure.presentation.dto.AccountOutputDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
