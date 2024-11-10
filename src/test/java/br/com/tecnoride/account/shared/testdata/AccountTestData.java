@@ -1,6 +1,9 @@
 package br.com.tecnoride.account.shared.testdata;
 
 import br.com.tecnoride.account.domain.entity.Account;
+import br.com.tecnoride.account.domain.valueobject.AccountName;
+import br.com.tecnoride.account.domain.valueobject.Cpf;
+import br.com.tecnoride.account.domain.valueobject.Email;
 import br.com.tecnoride.account.infrastructure.presentation.dto.AccountInputDto;
 import java.util.UUID;
 
@@ -30,13 +33,19 @@ public final class AccountTestData {
     return createAccount(id, FULANO_EMAIL, FULANO_BELTRANO, CPF, CAR_PLATE, IS_PASSENGER, IS_DRIVER);
   }
 
-  public static Account createAccount(String email, String name, String cpf, String carPlate,
+  public static Account createAccount(String emailInput, String nameInput, String cpfInput, String carPlate,
       boolean isPassenger, boolean isDriver) {
+    var email = new Email(emailInput);
+    var name = new AccountName(nameInput);
+    var cpf = new Cpf(cpfInput);
     return new Account(UUID.randomUUID(), email, name, cpf, carPlate, isPassenger, isDriver);
   }
 
-  public static Account createAccount(UUID uuid, String email, String name, String cpf, String carPlate,
+  public static Account createAccount(UUID uuid, String emailInput, String nameInput, String cpfInput, String carPlate,
       boolean isPassenger, boolean isDriver) {
+    var email = new Email(emailInput);
+    var name = new AccountName(nameInput);
+    var cpf = new Cpf(cpfInput);
     return new Account(uuid, email, name, cpf, carPlate, isPassenger, isDriver);
   }
 }
