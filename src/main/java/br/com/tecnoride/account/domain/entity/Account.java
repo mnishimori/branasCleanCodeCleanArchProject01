@@ -22,17 +22,17 @@ public class Account {
   private final boolean isDriver;
   private CarPlate carPlate;
 
-  public Account(String emailAddress, String accountName, String cpfNumber, String carPlate, boolean isPassenger,
+  public Account(Email email, AccountName accountName, Cpf cpf, String carPlate, boolean isPassenger,
       boolean isDriver) {
-    this(null, emailAddress, accountName, cpfNumber, carPlate, isPassenger, isDriver);
+    this(null, email, accountName, cpf, carPlate, isPassenger, isDriver);
   }
 
-  public Account(UUID id, String emailAddress, String name, String cpfNumber, String carPlateNumber,
+  public Account(UUID id, Email email, AccountName accountName, Cpf cpf, String carPlateNumber,
       boolean isPassenger, boolean isDriver) {
     this.id = id;
-    this.email = new Email(emailAddress);
-    this.accountName = new AccountName(name);
-    this.cpf = new Cpf(cpfNumber);
+    this.email = email;
+    this.accountName = accountName;
+    this.cpf = cpf;
     this.isPassenger = isPassenger;
     this.isDriver = isDriver;
     verifyIfAccountPassengerOrDriverWasFilled();

@@ -16,6 +16,9 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
 import br.com.tecnoride.account.domain.entity.Account;
+import br.com.tecnoride.account.domain.valueobject.AccountName;
+import br.com.tecnoride.account.domain.valueobject.Cpf;
+import br.com.tecnoride.account.domain.valueobject.Email;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -102,7 +105,10 @@ class AccountRepositoryImplTest {
   @Test
   void shouldFindAccountByEmailWhenAccountEmailExists() {
     var uuid = UUID.randomUUID();
-    var expectedAccount = new Account(uuid, FULANO_EMAIL, FULANO_BELTRANO, CPF, CAR_PLATE, IS_PASSENGER, IS_DRIVER);
+    var email = new Email(FULANO_EMAIL);
+    var name = new AccountName(FULANO_BELTRANO);
+    var cpf = new Cpf(CPF);
+    var expectedAccount = new Account(uuid, email, name, cpf, CAR_PLATE, IS_PASSENGER, IS_DRIVER);
     when(jdbcTemplate.queryForObject(anyString(), any(AccountRowMapper.class), eq(FULANO_EMAIL)))
         .thenReturn(expectedAccount);
 
@@ -115,7 +121,10 @@ class AccountRepositoryImplTest {
   @Test
   void shouldSaveAccountWhenUserIsPassengerAndAllAttributesAreCorrect() {
     var uuid = UUID.randomUUID();
-    var account = new Account(uuid, FULANO_EMAIL, FULANO_BELTRANO, CPF, null, true, false);
+    var email = new Email(FULANO_EMAIL);
+    var name = new AccountName(FULANO_BELTRANO);
+    var cpf = new Cpf(CPF);
+    var account = new Account(uuid, email, name, cpf, null, true, false);
     String insertSQL = "INSERT INTO cccat15.account (name, email, cpf, car_plate, is_passenger, is_driver) " +
         "VALUES (?, ?, ?, ?, ?, ?)";
     when(jdbcTemplate.update(insertSQL, account.getAccountName(), account.getEmail(), account.getCpf(),
@@ -127,7 +136,10 @@ class AccountRepositoryImplTest {
   @Test
   void shouldSaveAccountWhenUserIsDriverAndAllAttributesAreCorrect() {
     var uuid = UUID.randomUUID();
-    var account = new Account(uuid, FULANO_EMAIL, FULANO_BELTRANO, CPF, CAR_PLATE, false, true);
+    var email = new Email(FULANO_EMAIL);
+    var name = new AccountName(FULANO_BELTRANO);
+    var cpf = new Cpf(CPF);
+    var account = new Account(uuid, email, name, cpf, CAR_PLATE, false, true);
     String insertSQL = "INSERT INTO cccat15.account (name, email, cpf, car_plate, is_passenger, is_driver) " +
         "VALUES (?, ?, ?, ?, ?, ?)";
     when(jdbcTemplate.update(insertSQL, account.getAccountName(), account.getEmail(), account.getCpf(),

@@ -12,6 +12,9 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 import br.com.tecnoride.account.domain.entity.Account;
+import br.com.tecnoride.account.domain.valueobject.AccountName;
+import br.com.tecnoride.account.domain.valueobject.Cpf;
+import br.com.tecnoride.account.domain.valueobject.Email;
 import br.com.tecnoride.account.infrastructure.exception.NoResultException;
 import br.com.tecnoride.account.infrastructure.exception.ValidatorException;
 import br.com.tecnoride.account.infrastructure.gateway.AccountGatewayImpl;
@@ -56,7 +59,10 @@ class GetAccountByIdInteractorTest {
   @Test
   void shouldGetAccountWhenAccountWasFoundById() {
     var id = UUID.randomUUID();
-    var account = new Account(id, FULANO_EMAIL, FULANO_BELTRANO, CPF, CAR_PLATE, IS_PASSENGER, IS_DRIVER);
+    var email = new Email(FULANO_EMAIL);
+    var name = new AccountName(FULANO_BELTRANO);
+    var cpf = new Cpf(CPF);
+    var account = new Account(id, email, name, cpf, CAR_PLATE, IS_PASSENGER, IS_DRIVER);
     when(accountGateway.findAccountByIdRequired(id)).thenReturn(account);
 
     var accountFound = getAccountByIdUseCase.execute(id.toString());
