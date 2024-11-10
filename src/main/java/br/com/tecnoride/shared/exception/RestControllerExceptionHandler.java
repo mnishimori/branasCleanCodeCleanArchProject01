@@ -6,7 +6,7 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import br.com.tecnoride.account.domain.exception.BusinessException;
-import br.com.tecnoride.account.infrastructure.exception.DuplicatedException;
+import br.com.tecnoride.account.application.exception.DuplicatedException;
 import br.com.tecnoride.account.infrastructure.exception.NoResultException;
 import br.com.tecnoride.account.infrastructure.exception.ValidatorException;
 import org.springframework.http.ResponseEntity;

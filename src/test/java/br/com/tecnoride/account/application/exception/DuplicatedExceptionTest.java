@@ -1,4 +1,4 @@
-package br.com.tecnoride.account.infrastructure.exception;
+package br.com.tecnoride.account.application.exception;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
