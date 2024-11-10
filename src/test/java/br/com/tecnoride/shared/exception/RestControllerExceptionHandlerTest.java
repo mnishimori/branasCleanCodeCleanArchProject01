@@ -3,7 +3,7 @@ package br.com.tecnoride.shared.exception;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import br.com.tecnoride.account.domain.exception.BusinessException;
-import br.com.tecnoride.account.infrastructure.exception.DuplicatedException;
+import br.com.tecnoride.account.application.exception.DuplicatedException;
 import br.com.tecnoride.account.infrastructure.exception.NoResultException;
 import br.com.tecnoride.account.infrastructure.exception.ValidatorException;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package br.com.tecnoride.account.infrastructure.validator;
+package br.com.tecnoride.account.application.validator;
 
 import static br.com.tecnoride.account.domain.field.AccountDomainField.ACCOUNT_EMAIL_FIELD;
 import static br.com.tecnoride.account.infrastructure.message.AccountInfrastructureMessage.EMAIL_ALREADY_EXISTS;
@@ -9,7 +9,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
 import br.com.tecnoride.account.application.gateway.AccountGateway;
-import br.com.tecnoride.account.infrastructure.exception.DuplicatedException;
+import br.com.tecnoride.account.application.exception.DuplicatedException;
+import br.com.tecnoride.account.infrastructure.validator.VerifyIfAccountAlreadyExistsByEmailValidatorImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

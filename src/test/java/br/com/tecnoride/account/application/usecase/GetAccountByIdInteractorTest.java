@@ -1,4 +1,4 @@
-package br.com.tecnoride.account.infrastructure.usecase;
+package br.com.tecnoride.account.application.usecase;
 
 import static br.com.tecnoride.account.shared.testdata.AccountTestData.CAR_PLATE;
 import static br.com.tecnoride.account.shared.testdata.AccountTestData.CPF;
@@ -18,6 +18,7 @@ import br.com.tecnoride.account.domain.valueobject.Email;
 import br.com.tecnoride.account.infrastructure.exception.NoResultException;
 import br.com.tecnoride.account.infrastructure.exception.ValidatorException;
 import br.com.tecnoride.account.infrastructure.gateway.AccountGatewayImpl;
+import br.com.tecnoride.account.infrastructure.usecase.GetAccountByIdInteractor;
 import br.com.tecnoride.shared.validator.UuidValidator;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package br.com.tecnoride.account.infrastructure.usecase;
+package br.com.tecnoride.account.application.usecase;
 
 import static br.com.tecnoride.account.shared.testdata.AccountTestData.CAR_PLATE;
 import static br.com.tecnoride.account.shared.testdata.AccountTestData.CPF;
@@ -16,6 +16,7 @@ import static org.mockito.Mockito.when;
 
 import br.com.tecnoride.account.domain.entity.Account;
 import br.com.tecnoride.account.infrastructure.gateway.AccountGatewayImpl;
+import br.com.tecnoride.account.infrastructure.usecase.CreateAccountInteractor;
 import br.com.tecnoride.account.infrastructure.validator.VerifyIfAccountAlreadyExistsByEmailValidatorImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -61,7 +62,7 @@ class CreateAccountInteractorTest {
   @ParameterizedTest
   @NullAndEmptySource
   @ValueSource(strings = {"72387289316", "18939181068", "12345678901", "11111111111", "1111111111a"})
-  void shouldReturnCpfIsInvalidWhenUserCpfIsValid(String cpfNumber) throws Exception {
+  void shouldReturnCpfIsInvalidWhenUserCpfIsValid(String cpfNumber) {
     var accountInputDto = createAccountInputDto(FULANO_EMAIL, FULANO_BELTRANO, cpfNumber, CAR_PLATE, IS_PASSENGER,
         IS_DRIVER);
 
